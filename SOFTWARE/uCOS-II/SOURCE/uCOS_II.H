@@ -404,6 +404,10 @@ typedef struct os_tcb {
     INT8U          OSTCBY;             /* Index into ready table corresponding to task priority        */
     INT8U          OSTCBBitX;          /* Bit mask to access bit position in ready table               */
     INT8U          OSTCBBitY;          /* Bit mask to access bit position in ready group               */
+    
+    INT8U          compTime;
+    INT8U          taskcomp;
+    INT8U          taskPeriod;
 
 #if OS_TASK_DEL_EN > 0
     BOOLEAN        OSTCBDelReq;        /* Indicates whether a task needs to delete itself              */
@@ -416,6 +420,7 @@ typedef struct os_tcb {
 *                                            GLOBAL VARIABLES
 *********************************************************************************************************
 */
+OS_EXT  char              printBuffer[1024];
 
 OS_EXT  INT32U            OSCtxSwCtr;               /* Counter of number of context switches           */
 
