@@ -67,6 +67,7 @@ static  void  OS_InitRdyList(void);
 static  void  OS_InitTaskIdle(void);
 static  void  OS_InitTaskStat(void);
 static  void  OS_InitTCBList(void);
+static  void  intToString(char *, int);
 
 /*$PAGE*/
 /*
@@ -172,7 +173,7 @@ void  OSIntEnter (void)
 void  OSIntExit (void)
 {
     INT8U OSPrio;
-    char s[100];
+    char s[50];
 #if OS_CRITICAL_METHOD == 3                                /* Allocate storage for CPU status register */
     OS_CPU_SR  cpu_sr;
 #endif
@@ -189,17 +190,15 @@ void  OSIntExit (void)
             if (OSPrioHighRdy != OSPrioCur) {              /* No Ctx Sw if current task is highest rdy */
                 OSTCBHighRdy  = OSTCBPrioTbl[OSPrioHighRdy];
                 OSCtxSwCtr++;                              /* Keep track of the number of ctx switches */
-                memset(s, 0, 100);
-                sprintf(s, "%5d", OSTime);
+                intToString(s, OSTime);
                 strcat(printBuffer, s);
                 strcat(printBuffer, "  Preempt ");
-                memset(s, 0, 100);
-                sprintf(s, "%2d", OSPrio);
+                intToString(s, OSPrio);
                 strcat(printBuffer, s);
                 strcat(printBuffer, " ");
-                memset(s, 0, 100);
-                sprintf(s, "%2d\n", OSPrioHighRdy);
+                intToString(s, OSPrioHighRdy);
                 strcat(printBuffer, s);
+                strcat(printBuffer, "\n");
                 OSIntCtxSw();                              /* Perform interrupt level ctx switch       */
             }
             
@@ -915,17 +914,15 @@ void  OS_Sched (void)
             OSPrio = OSPrioCur;
             OSTCBHighRdy = OSTCBPrioTbl[OSPrioHighRdy];
             OSCtxSwCtr++;                              /* Increment context switch counter             */
-            memset(s, 0, 100);
-            sprintf(s, "%5d", OSTime);
+            intToString(s, OSTime);
             strcat(printBuffer, s);
             strcat(printBuffer, " Complete ");
-            memset(s, 0, 100);
-            sprintf(s, "%2d", OSPrio);
+            intToString(s, OSPrio);
             strcat(printBuffer, s);
             strcat(printBuffer, " ");
-            memset(s, 0, 100);
-            sprintf(s, "%2d\n", OSPrioHighRdy);
+            intToString(s, OSPrioHighRdy);
             strcat(printBuffer, s);
+            strcat(printBuffer, "\n");
             OS_TASK_SW();                              /* Perform a context switch                     */
         }
     }
@@ -1172,4 +1169,19 @@ INT8U  OS_TCBInit (INT8U prio, OS_STK *ptos, OS_STK *pbos, INT16U id, INT32U stk
     }
     OS_EXIT_CRITICAL();
     return (OS_NO_MORE_TCB);
+}
+
+static  void  intToString(char * s, int i) {
+    char t[50] = {0};
+    int count = 0;
+    int a = 0;
+    int j;
+    do {
+        t[count++] = i % 10 + '0';
+        i /= 10;
+    } while(i > 0);
+    for(j = count - 1; j >= 0; j--) {
+        s[a++] = t[j];
+    }
+    s[a] = '\0';
 }

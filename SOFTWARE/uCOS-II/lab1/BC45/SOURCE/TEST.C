@@ -152,13 +152,14 @@ void Task (void *pdata)
 
 void printmsgTask (void *pdata) 
 {
+    pdata = pdata;
     while (1) {
         OS_ENTER_CRITICAL();
         strncpy(printBuffercopy, printBuffer, 2048);
         memset(printBuffer, 0, 2048);
         OS_EXIT_CRITICAL();
         printf("%s", printBuffercopy);
-        OSTimeDly ((INT16U)10);
+        OSTimeDly ((INT16U)80);
     }
     
 
