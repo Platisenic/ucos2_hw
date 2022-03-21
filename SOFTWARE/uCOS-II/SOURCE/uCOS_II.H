@@ -420,7 +420,7 @@ typedef struct os_tcb {
 *                                            GLOBAL VARIABLES
 *********************************************************************************************************
 */
-OS_EXT  char              printBuffer[1024];
+OS_EXT  char              printBuffer[2048];
 
 OS_EXT  INT32U            OSCtxSwCtr;               /* Counter of number of context switches           */
 

@@ -30,7 +30,7 @@
 OS_STK        TaskStk[N_TASKS][TASK_STK_SIZE];        /* Tasks stacks                                  */
 OS_STK        TaskStartStk[TASK_STK_SIZE];
 char          TaskData[N_TASKS];                      /* Parameters to pass to each task               */
-char          printBuffercopy[1024];
+char          printBuffercopy[2048];
 
 /*
 *********************************************************************************************************
@@ -107,8 +107,16 @@ void  TaskStart (void *pdata)
 
 static  void  TaskStartCreateTasks (void)
 {
+#if OS_TASK_ONE_EN == 1
     OSTaskCreate(Task, (void *)0, &TaskStk[0][TASK_STK_SIZE - 1], 1);
+#endif  
+#if OS_TASK_TWO_EN == 1
     OSTaskCreate(Task, (void *)0, &TaskStk[1][TASK_STK_SIZE - 1], 2);
+#endif 
+#if OS_TASK_THREE_EN == 1
+    OSTaskCreate(Task, (void *)0, &TaskStk[2][TASK_STK_SIZE - 1], 3);
+#endif
+
     OSTaskCreate(printmsgTask, (void *)0, &TaskStk[4][TASK_STK_SIZE - 1], 5);
 }
 
@@ -146,11 +154,11 @@ void printmsgTask (void *pdata)
 {
     while (1) {
         OS_ENTER_CRITICAL();
-        strncpy(printBuffercopy, printBuffer, 1024);
-        memset(printBuffer, 0, 1024);
+        strncpy(printBuffercopy, printBuffer, 2048);
+        memset(printBuffer, 0, 2048);
         OS_EXIT_CRITICAL();
         printf("%s", printBuffercopy);
-        OSTimeDlyHMSM(0, 0, 1, 0);
+        OSTimeDly ((INT16U)10);
     }
     
 

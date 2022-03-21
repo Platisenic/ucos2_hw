@@ -18,6 +18,17 @@
 *                                         uC/OS-II CONFIGURATION
 *********************************************************************************************************
 */
+#define OS_TASK_ONE_EN            1
+#define OS_TAST_ONE_C             1
+#define OS_TASK_OME_P             3
+
+#define OS_TASK_TWO_EN            1
+#define OS_TAST_TWO_C             3
+#define OS_TASK_TWO_P             6
+
+#define OS_TASK_THREE_EN          1
+#define OS_TAST_THREE_C           4
+#define OS_TASK_THREE_P           9
 
 #define OS_MAX_EVENTS             2    /* Max. number of event control blocks in your application ...  */
                                        /* ... MUST be > 0                                              */
